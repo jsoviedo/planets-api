@@ -1,0 +1,20 @@
+{
+  "name": "planetas-api",
+  "version": "1.0.0",
+  "description": "Proyecto Arquitectura de Software Politenico Grancolmbiano 2020-1",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "nodemon": "nodemon server.js"
+  },
+  "author": "Sebastian Oviedo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mongoose": "^5.9.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}

@@ -1,6 +1,6 @@
 {
     "env":{
         "ATLAS_PSWRD": "atlaspassword",
-        "PORT": "3500"
+        "PORT": "3000"
     }
 }

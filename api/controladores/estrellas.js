@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 // Models
 const Star = require('../rutas/modelos/star');
 
-// Return all the stars in the dabatase 
+// Returns all the stars in the dabatase 
 exports.getStars = (req, res, next) => {
     Star.find()
     .then( documents => {
@@ -33,7 +33,7 @@ exports.getStars = (req, res, next) => {
     });
 }
 
-// Return a star based on a given id 
+// Returns a star based on a given id 
 exports.getStar = (req, res, next) => {
     Star.findById(req.params.id)
     .then( document => {
@@ -69,7 +69,7 @@ exports.updateStar = (req, res, next) => {
                 message: "Invalid Star"
             });
         }
-        updateStar(id, documents);
+        updateStar(id);
     })
     .catch( error => {
         console.log(error);
@@ -78,23 +78,33 @@ exports.updateStar = (req, res, next) => {
         });
     });
    
-    function updateStar(id, document) {
+    function updateStar(id) {
         const starUpdated =  new Star ({
             _id: id,
             name: req.body.name,
             size: req.body.size
         });
         Star.updateOne({_id: id}, {$set: starUpdated})
-        .then( result => {
-            const response = {
-                message: "Star Updated",
-                star: {
-                    _id: id,
-                    name: document.name,
-                    size: document.size
-                }
-            }
-            res.status(200).json(response);
+        .then(() => {
+            Star.findById(id)
+            .then(star => {
+                const response = {
+                    message: "Star Updated",
+                    star: {
+                        _id: star.id,
+                        name: star.name,
+                        size: star.size
+                    }
+                } 
+                res.status(200).json(response);      
+            })
+            .catch(error => {
+                console.log(error);
+                res.status(500).json({
+                    message: "Something went wrong",
+                    error: error
+                });
+            })
         })
         .catch( error => {
             console.log(error);
@@ -103,6 +113,7 @@ exports.updateStar = (req, res, next) => {
     }
 }
 
+// Creates a star in the database
 exports.createStar = (req, res, next) => {
     Star.findOne({ name: req.body.name })
     .then( result => {
@@ -139,17 +150,18 @@ exports.createStar = (req, res, next) => {
     });
 }
 
+// Deletes an star in the database
 exports.deleteStar = (req, res, next) => {
     const id = req.params.id;
     Star.findById(id)
     .then(result => {
         if (!result) {
             return res.status(200).json({
-                message: "Invalid Star"
+                message: "Invalid Star id"
             });
         }
         Star.deleteOne({_id: id})
-        .then(document => {
+        .then( () => {
             res.status(200).json({
                 message: "Star deleted"
             });
@@ -160,5 +172,5 @@ exports.deleteStar = (req, res, next) => {
                 error: error
             });
         });
-    })
+    });
 }

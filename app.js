@@ -10,6 +10,7 @@ const atpswd = process.env.ATLAS_PSWRD;
 const url = "mongodb+srv://joan:"+ atpswd + "@cluster0-9ztll.gcp.mongodb.net/test?retryWrites=true&w=majority";
 
 const starRoutes = require('./api/rutas/estrellas');
+const planetRoutes = require('./api/rutas/planetas');
 
 mongoose.connect(url, {
     useNewUrlParser: true,
@@ -29,6 +30,7 @@ app.use((req, res, next) => {
 });
 
 app.use('/stars', starRoutes);
+app.use('/planets', planetRoutes);
 
 app.use((req, res, next) => {
     const error = new Error('Not found');
